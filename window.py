@@ -1,26 +1,29 @@
 from PyQt5.QtWidgets import QMainWindow, QWidget, QDialog
-# from PySide2 import QtCore
 
 import ui.fin
 import ui.main
 import ui.adduser
 import ui.useradd 
+# import menus
 
 class WindowManager():
     def __init__(self) -> None:
         self.window = Window()
+        
+    def start(self):
+        self.launch_main_menu()
+        # self.launch_log_manager()
 
     def launch(self, menu):
         self.window.launch(menu)
     
     def launch_main_menu(self):
-        current = ui.main.Ui_main()
-        self.launch(current)
-        current.pushButton_2.clicked.connect(self.launch_log_manager)
+        import menus
+        menus.MainMenu(self)
 
     def launch_log_manager(self):
-        current = ui.fin.Ui_MainWindow()
-        self.launch(current)
+        import menus
+        menus.ReportMenu(self)
 
     def launch_add_user(self):
         current = ui.adduser.Ui_Frame()
@@ -42,7 +45,7 @@ class Window(QMainWindow):
 
     def launch(self, menu):
         menu.setupUi(self)
-        self.setFixedSize(800,600)
+        # self.setFixedSize(800,600)
         self.show()
 
     def accept(self):
