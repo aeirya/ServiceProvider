@@ -41,3 +41,5 @@ class Ui_main(object):
         self.label.setText(_translate("main", "سیستم مدیریت شرکت خدمات􏰀"))
         self.pushButton_2.setText(_translate("main", "گزارش مالی"))
         self.pushButton_3.setText(_translate("main", "لیست کاربران"))
+
+    
