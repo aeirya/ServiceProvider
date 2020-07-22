@@ -4,14 +4,9 @@ import sys
 
 class Main():
     def __init__(self) -> None:
+        app = QApplication(sys.argv)
         self.modules = Modules()
-        self.modules.start()
-        pass
+        sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
     Main()
-    # w = QMainWindow()
-    # w.setFixedSize(800, 400)
-    # w.show()
-    sys.exit(app.exec_())

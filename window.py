@@ -11,6 +11,8 @@ class WindowManager():
         # self.l()
 
     def launch(self, menu):
+        # self.window.hide()
+        # self.window = Window()
         self.window.launch(menu)
     
     def launch_main_menu(self):
