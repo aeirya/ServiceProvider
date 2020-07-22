@@ -1,13 +1,13 @@
 from modules import Modules
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
 
-class Main():
+class Main:
+
     def __init__(self) -> None:
+        app = QApplication(sys.argv)
         self.modules = Modules()
-        self.modules.start()
+        sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
     Main()
-    sys.exit(app.exec_())
