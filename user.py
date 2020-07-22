@@ -11,9 +11,14 @@ class User():
 class UserManager():
     def __init__(self, data : Data):
         self.data = data
+        self.load_users()
     
     def load_users(self):
-        self.users = self.data.allCustomers()
+        C = self.data.allCustomers()
+        self.users = [User(c[0], c[1], c[2], c[3], c[4]) for c in C]
+
+    def get_users(self):
+        return self.users
 
     def add_user(self, user : User):
         self.data.addCustomer(user.firstname, user.surname, user.phone, user.address)

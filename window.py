@@ -17,8 +17,14 @@ class WindowManager():
     def launch_main_menu(self):
         self.menu = menus.MainMenu(self)
 
+    def launch_clients_menu(self):
+        self.menu = menus.ClientsMenu(self, self.modules.users)
+        
     def launch_log_manager(self):
         menus.ReportMenu(self)
+
+    def launch_add_user_menu(self):
+        menus.AddUserMenu(self, self.modules.users)
 
 class Window(QMainWindow):
     def __init__(self) -> None:

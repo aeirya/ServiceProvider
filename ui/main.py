@@ -30,13 +30,9 @@ class Ui_main(object):
         self.pushButton_3 = QtWidgets.QPushButton(main)
         self.pushButton_3.setGeometry(QtCore.QRect(320, 240, 161, 71))
         self.pushButton_3.setObjectName("pushButton_3")
-        self.pushButton_3.clicked.connect(self.f)
         self.retranslateUi(main)
         QtCore.QMetaObject.connectSlotsByName(main)
-
-    def f(self):
-        print("HI")
-
+        
     def retranslateUi(self, main):
         _translate = QtCore.QCoreApplication.translate
         main.setWindowTitle(_translate("main", "main"))
