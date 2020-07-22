@@ -344,8 +344,3 @@ class Data():
             );
         ''')
         connection.commit()
-
-    
-if __name__ == "__main__":
-    db = Data()
-    print(db.removeSkill('salam'))
