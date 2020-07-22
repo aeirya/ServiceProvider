@@ -3,7 +3,7 @@ import ui.main as main
 import ui.fin as report
 import ui.useradd as user
 
-from PyQt5.QtWidgets import QMainWindow, QWidget, QDialog
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QWidget, QDialog
 
 class MainMenu:
     def __init__(self, window):
@@ -60,10 +60,14 @@ class ClientsMenu:
         um = self.usermanager
         users = um.get_users()
         table = menu.table
+        table.clearContents()
+        table.setColumnCount(5)
+        table.setRowCount(len(users))
 
         r = 0
         for user in users:
-            fill = lambda c, text : table.item(r, c).setText(text)
+            table.insertRow(r)  
+            fill = lambda c, text : table.setItem(r, c, QTableWidgetItem(text))
             fill(0, user.id)
             fill(1, user.firstname)
             fill(2, user.surname)
@@ -74,6 +78,8 @@ class ClientsMenu:
 
     def launch_add_user(self):
         self.window.launch_add_user_menu()
+        print("refresh")
+        self.fill_rows()
 
 class AddUserMenu:
     def __init__(self, window, usermanager):
@@ -109,8 +115,13 @@ class AddUserMenu:
         id = self.get_next_id()
         self.users.add_user(User(0, fname, lname, phone, address))
 
+
     def get_next_id(self):
         return 0
         
     def clear(self):
-        self.menu.lineEdit.clear()
+        cls = lambda lineEdit : lineEdit.setText("")
+        cls(self.fname)
+        cls(self.lname)
+        cls(self.phone)
+        cls(self.address)
