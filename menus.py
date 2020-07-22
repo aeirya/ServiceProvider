@@ -6,21 +6,24 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QDialog
 
 class MainMenu:
     def __init__(self, window):
+        self.menu = main.Ui_main()
+        window.launch(self.menu)
         self.window = window
-        menu = main.Ui_main()
-        window.launch(menu)
-        menu.pushButton.setText("Dfdkfhfk")
-        menu.pushButton.clicked.connect(self.f)
-        menu.pushButton_3.clicked.connect(self.quit)
-        menu.pushButton_2.clicked.connect(self.launch_log_manager)
-        menu.pushButton_3.hide()
+        self.setup()
     
+    def setup(self):
+        menu = self.menu
+        menu.pushButton.clicked.connect(self.f)
+        menu.pushButton_2.clicked.connect(self.launch_log_manager)
+        menu.pushButton_3.clicked.connect(self.quit)
+
     def f(self):
         print("Fuck")
 
     def launch_log_manager(self):
-        self.window.launch_log_manager()
         print("clieck")
+        # print(win)
+        self.window.launch_log_manager()
 
     def quit(self):
         quit()

@@ -2,7 +2,8 @@ from modules import Modules
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys
 
-class Main():
+class Main:
+
     def __init__(self) -> None:
         app = QApplication(sys.argv)
         self.modules = Modules()

@@ -6,8 +6,7 @@ class Modules():
     def __init__(self) -> None:
         self.data = Data()
         self.users = UserManager(self.data)
-        self.window = WindowManager()
-        
+        self.window = WindowManager(self)
         self.start()
 
     def start(self):
