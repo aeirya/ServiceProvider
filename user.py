@@ -15,7 +15,7 @@ class UserManager():
     
     def load_users(self):
         C = self.data.allCustomers()
-        self.users = [User(c[0], c[1], c[2], c[3], c[4]) for c in C]
+        self.users = [User(str(c[0]), c[1], c[2], c[3], c[4]) for c in C]
 
     def get_users(self):
         return self.users

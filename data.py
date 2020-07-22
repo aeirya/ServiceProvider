@@ -15,8 +15,14 @@ class Data():
         except:
             raise Exception('Database connection failed!')
 
-    def __empty_check(self, var, text):
+    def __empty_check(self, var):
         if str(var).strip() == '':
+            return True
+        else:
+            return False
+
+    def __empty_replace(self, var, text):
+        if self.__empty_check(var):
             return text
         else:
             return var
@@ -44,20 +50,24 @@ class Data():
             return False
 
     def addSkill(self, name):
-        connection = self.__create_connection()
-        cursor = connection.cursor()
+        if not self.__empty_check(name):
+            connection = self.__create_connection()
+            cursor = connection.cursor()
 
-        name = str(name).strip().lower()
+            name = str(name).strip().lower()
 
-        cursor.execute('SELECT count FROM "skills" WHERE name=?', (name,))
-        skill = cursor.fetchone()[0]
+            cursor.execute('SELECT count FROM "skills" WHERE name=?', (name,))
+            skill = cursor.fetchone()[0]
 
-        if skill:
-            cursor.execute('UPDATE "skills" SET count=? WHERE name=?', (skill+1, name))
-            connection.commit()
+            if skill:
+                cursor.execute('UPDATE "skills" SET count=? WHERE name=?', (skill+1, name))
+                connection.commit()
+            else:
+                cursor.execute('INSERT INTO "skills" VALUES(NULL, ?, 1)', (name,))
+                connection.commit()
+            return True
         else:
-            cursor.execute('INSERT INTO "skills" VALUES(NULL, ?, 1)', (name,))
-            connection.commit()
+            return False
 
     def removeSkill(self, name):
         connection = self.__create_connection()
@@ -94,20 +104,29 @@ class Data():
 
     def addRequest(self, date, skill, customer, worker, score, cost, income):
         try:
-            connection = self.__create_connection()
-            cursor = connection.cursor()
+            if (not self.__empty_check(date) and 
+                not self.__empty_check(skill) and 
+                not self.__empty_check(customer) and 
+                not self.__empty_check(worker) and 
+                not self.__empty_check(score) and 
+                not self.__empty_check(cost) and 
+                not self.__empty_check(income)):
 
-            cursor.execute('INSERT INTO "requests" VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)',
-            (date, skill, customer, worker, score, cost, income))
-            connection.commit()
+                connection = self.__create_connection()
+                cursor = connection.cursor()
 
-            w = self.findWorker(userid= worker)
-            cursor.execute('UPDATE "workers" SET score=? WHERE id=?', (w[5]+score, worker))
-            connection.commit()
+                cursor.execute('INSERT INTO "requests" VALUES(NULL, ?, ?, ?, ?, ?, ?, ?)',
+                (date, skill, customer, worker, score, cost, income))
+                connection.commit()
 
-            return True
+                w = self.findWorker(userid= worker)
+                cursor.execute('UPDATE "workers" SET score=? WHERE id=?', (w[5]+score, worker))
+                connection.commit()
+
+                return True
         except:
-            return False
+            pass
+        return False
 
 
 
@@ -149,14 +168,18 @@ class Data():
 
     def addCustomer(self, fname, lname, phone, address):
         try:
-            connection = self.__create_connection()
-            cursor = connection.cursor()
+            if (not self.__empty_check(fname) and
+                not self.__empty_check(lname)):
 
-            cursor.execute('INSERT INTO "customers" VALUES(NULL, ?, ?, ?, ?)', (fname, lname, phone, address))
-            connection.commit()
-            return True
+                connection = self.__create_connection()
+                cursor = connection.cursor()
+
+                cursor.execute('INSERT INTO "customers" VALUES(NULL, ?, ?, ?, ?)', (fname, lname, phone, address))
+                connection.commit()
+                return True
         except:
-            return False
+            pass
+        return False
     
     def editCustomer(self, userid, fname='', lname='', phone='', address=''):
         try:
@@ -166,10 +189,10 @@ class Data():
             cursor.execute('SELECT FROM "customers" WHERE id=?', (userid,))
             user = cursor.fetchone()[0]
 
-            fname = self.__empty_check(fname, user[1])
-            lname = self.__empty_check(lname, user[2])
-            phone = self.__empty_check(phone, user[3])
-            address = self.__empty_check(address, user[4])
+            fname = self.__empty_replace(fname, user[1])
+            lname = self.__empty_replace(lname, user[2])
+            phone = self.__empty_replace(phone, user[3])
+            address = self.__empty_replace(address, user[4])
 
             cursor.execute('UPDATE "customers" SET firstname=?, lastname=?, phone=?, address=? WHERE id=?',
             (fname, lname, phone, address, userid))
@@ -229,21 +252,26 @@ class Data():
 
     def addWorker(self, fname, lname, phone, skills, score=0):
         try:
-            connection = self.__create_connection()
-            cursor = connection.cursor()
+            if (not self.__empty_check(fname) and
+                not self.__empty_check(lname) and
+                not self.__empty_check(skills)):
 
-            skillNames = self.__remove_empty_items(str(skills).split(','))
-            skills = skills[1:]
+                connection = self.__create_connection()
+                cursor = connection.cursor()
 
-            cursor.execute('INSERT INTO "workers" VALUES(NULL, ?, ?, ?, ?, ?)', (fname, lname, phone, skills, score))
-            connection.commit()
+                skillNames = self.__remove_empty_items(str(skills).split(','))
+                skills = skills[1:]
 
-            for item in skillNames:
-                self.addSkill(item)
+                cursor.execute('INSERT INTO "workers" VALUES(NULL, ?, ?, ?, ?, ?)', (fname, lname, phone, skills, score))
+                connection.commit()
 
-            return True
+                for item in skillNames:
+                    self.addSkill(item)
+
+                return True
         except:
-            return False
+            pass
+        return False
     
     def editWorker(self, userid, fname='', lname='', phone='', skills=''):
         try:
@@ -253,10 +281,10 @@ class Data():
             cursor.execute('SELECT FROM "workers" WHERE id=?', (userid,))
             user = cursor.fetchone()[0]
 
-            fname = self.__empty_check(fname, user[1])
-            lname = self.__empty_check(lname, user[2])
-            phone = self.__empty_check(phone, user[3])
-            skills = self.__empty_check(skills, user[4])
+            fname = self.__empty_replace(fname, user[1])
+            lname = self.__empty_replace(lname, user[2])
+            phone = self.__empty_replace(phone, user[3])
+            skills = self.__empty_replace(skills, user[4])
 
             cursor.execute('UPDATE "workers" SET firstname=?, lastname=?, phone=?, skills=? WHERE id=?',
             (fname, lname, phone, skills, userid))
