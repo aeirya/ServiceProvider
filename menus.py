@@ -174,12 +174,16 @@ class WorkersMenu:
     def fill_rows(self, items):
         table = self.menu.table
         table.clearContents()
-        table.setColumnCount(len(items[0]))
-        table.setRowCount(len(items))
+        try:
+            table.setColumnCount(len(items[0]))
+            table.setRowCount(len(items))
+        except:
+            table.setColumnCount(6)
+            table.setRowCount(1)
         r = 0
         for item in items:
             table.insertRow(r)  
-            fill = lambda c, text : table.setItem(r, c, QTableWidgetItem(text))
+            fill = lambda c, text : table.setItem(r, c, QTableWidgetItem(str(text)))
             i = 0
             for x in item:
                 fill(i, x)

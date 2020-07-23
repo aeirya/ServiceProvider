@@ -148,19 +148,19 @@ class Data():
         cursor = connection.cursor()
 
         if str(userid).strip() != '':
-            cursor.execute('SELECT FROM "customers" WHERE id=?', (int(userid),))
+            cursor.execute('SELECT * FROM "customers" WHERE id=?', (int(userid),))
             return cursor.fetchone()[0]
 
         elif str(name).strip() != '':
-            cursor.execute('SELECT FROM "customers" WHERE firstname LIKE "%?%" OR lastname LIKE "%?%"', (name, name))
+            cursor.execute('SELECT * FROM "customers" WHERE firstname LIKE "%?%" OR lastname LIKE "%?%"', (name, name))
             return cursor.fetchall()
 
         elif str(phone).strip() != '':
-            cursor.execute('SELECT FROM "customers" WHERE phone LIKE "%?%"', (phone,))
+            cursor.execute('SELECT * FROM "customers" WHERE phone LIKE "%?%"', (phone,))
             return cursor.fetchall()
 
         elif str(address).strip() != '':
-            cursor.execute('SELECT FROM "customers" WHERE address LIKE "%?%"', (address,))
+            cursor.execute('SELECT * FROM "customers" WHERE address LIKE "%?%"', (address,))
             return cursor.fetchall()
 
         else:
@@ -186,7 +186,7 @@ class Data():
             connection = self.__create_connection()
             cursor = connection.cursor()
 
-            cursor.execute('SELECT FROM "customers" WHERE id=?', (userid,))
+            cursor.execute('SELECT * FROM "customers" WHERE id=?', (userid,))
             user = cursor.fetchone()[0]
 
             fname = self.__empty_replace(fname, user[1])
@@ -232,19 +232,19 @@ class Data():
         cursor = connection.cursor()
 
         if str(userid).strip() != '':
-            cursor.execute('SELECT FROM "workers" WHERE id=?', (int(userid),))
-            return cursor.fetchone()[0]
+            cursor.execute('SELECT * FROM "workers" WHERE id=?', (int(userid),))
+            return cursor.fetchone()
 
         elif str(name).strip() != '':
-            cursor.execute('SELECT FROM "workers" WHERE firstname LIKE "%?%" OR lastname LIKE "%?%"', (name, name))
+            cursor.execute('SELECT * FROM "workers" WHERE firstname LIKE "%?%" OR lastname LIKE "%?%"', (name, name))
             return cursor.fetchall()
 
         elif str(phone).strip() != '':
-            cursor.execute('SELECT FROM "workers" WHERE phone LIKE "%?%"', (phone,))
+            cursor.execute('SELECT * FROM "workers" WHERE phone LIKE "%?%"', (phone,))
             return cursor.fetchall()
 
         elif str(skill).strip() != '':
-            cursor.execute('SELECT FROM "workers" WHERE skills LIKE "%?%"', (skill,))
+            cursor.execute('SELECT * FROM "workers" WHERE skills LIKE "%?%"', (skill,))
             return cursor.fetchall()
 
         else:
@@ -278,7 +278,7 @@ class Data():
             connection = self.__create_connection()
             cursor = connection.cursor()
 
-            cursor.execute('SELECT FROM "workers" WHERE id=?', (userid,))
+            cursor.execute('SELECT * FROM "workers" WHERE id=?', (userid,))
             user = cursor.fetchone()[0]
 
             fname = self.__empty_replace(fname, user[1])

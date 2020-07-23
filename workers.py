@@ -1,11 +1,21 @@
 class Worker:
-    def __init__(self, id , fname, lname, phone, skills, score):
-        self.id = id
-        self.fname = fname
-        self.lname = lname
-        self.phone = phone
-        self.skills = skills
-        self.score = score
+    id = None
+    fname = None
+    lname = None
+    phone = None
+    score = None
+    skills = None
+
+    def __init__(self, items):
+        self.id = items[0]
+        self.fname = items[1]
+        self.lname = items[2]
+        self.phone = items[3]
+        self.score = items[4]
+        self.skills = items[5]
+
+    def __str__(self) -> str:
+        return str((self.id, self.fname, self.lname, self.phone, self.score, self.skills))
 
 class WorkerManager:
     
