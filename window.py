@@ -38,8 +38,8 @@ class WindowManager():
     def pop_dialog(self, menu):
         self.dialog = QDialog()
         menu.setupUi(self.dialog)
-        # self.dialog.show()
-        self.dialog.exec()
+        self.dialog.show()
+        # self.dialog.exec()
 
 class Window(QMainWindow):
     def __init__(self) -> None:

@@ -4,7 +4,7 @@ import ui.main as main
 import ui.fin as report
 import ui.useradd as user
 
-from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QWidget, QDialog
+from PyQt5.QtWidgets import QMainWindow, QTableWidgetItem, QWidget, QDialog, QInputDialog
 
 class MainMenu:
     def __init__(self, window):
@@ -149,7 +149,16 @@ class WorkersMenu:
         m.addButton.clicked.connect(self.add)
         m.searchButton.clicked.connect(self.window.launch_worker_search)
         m.backButton.clicked.connect(self.window.launch_main_menu)
-        m.deleteButton.clicked.connect(lambda: print("delete"))
+        m.deleteButton.clicked.connect(self.delete)
+
+    def delete(self):
+        title = 'حذف خدمات دهنده'
+        message = 'شماره شناسه فرد مورد نظر'
+        text, ok = QInputDialog.getText(self.window.window,title ,message )
+        id = int(text)
+        if ok:
+            self.data.removeWorker(id)
+        self.refresh()
 
     def add(self):
         self.window.launch_worker_add()
