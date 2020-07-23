@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QDialog
 import menus
 
 class WindowManager():
@@ -21,16 +21,25 @@ class WindowManager():
         self.menu = menus.ClientsMenu(self, self.modules.users)
         
     def launch_log_manager(self):
-        menus.ReportMenu(self)
+        self.menu = menus.ReportMenu(self)
 
     def launch_add_user_menu(self):
-        menus.AddUserMenu(self, self.modules.users)
+        self.pop = menus.AddUserMenu(self, self.modules.users)
 
     def launch_workers_menu(self):
-        menus.WorkersMenu(self)
+        self.menu = menus.WorkersMenu(self, self.modules.workers)
 
     def launch_worker_search(self):
-        menus.WorkerEdit(self)
+        self.menu = menus.WorkerEdit(self, self.modules.workers)
+
+    def launch_worker_add(self):
+        self.pop = menus.WorkerAdd(self, self.modules.workers)
+
+    def pop_dialog(self, menu):
+        self.dialog = QDialog()
+        menu.setupUi(self.dialog)
+        # self.dialog.show()
+        self.dialog.exec()
 
 class Window(QMainWindow):
     def __init__(self) -> None:

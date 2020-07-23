@@ -130,3 +130,5 @@ dmypy.json
 
 # Databases
 data.db
+
+.VSCodeCounter

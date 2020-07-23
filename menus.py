@@ -1,3 +1,4 @@
+from workers import Worker
 from user import User, UserManager
 import ui.main as main
 import ui.fin as report
@@ -25,8 +26,8 @@ class MainMenu:
     def launch_log_manager(self):
         self.window.launch_log_manager()
 
-    def laucnh_workers_menu(self):
-        self.window.laucnh_workers_menu()
+    def launch_workers_menu(self):
+        self.window.launch_workers_menu()
 
     def quit(self):
         quit()
@@ -123,7 +124,6 @@ class AddUserMenu:
         id = self.get_next_id()
         self.users.add_user(User(0, fname, lname, phone, address))
 
-
     def get_next_id(self):
         return 0
         
@@ -135,30 +135,52 @@ class AddUserMenu:
         cls(self.address)
 
 class WorkersMenu:
-    def __init__(self, window):
+    def __init__(self, window, workers):
+        self.workers = workers
         from ui.worker import Ui_MainWindow
         self.menu = Ui_MainWindow()
         window.launch(self.menu)
         self.window = window
         self.setup()
+        self.refresh()
     
     def setup(self):
         m = self.menu
-        m.backButton.clicked.connect(self.window.launch_main_menu)
         m.addButton.clicked.connect(self.add)
-        m.searchButton.clicked.connect(self.search)
+        m.searchButton.clicked.connect(self.window.launch_worker_search)
+        m.backButton.clicked.connect(self.window.launch_main_menu)
+        m.deleteButton.clicked.connect(lambda: print("delete"))
 
     def add(self):
-        pass
+        self.window.launch_worker_add()
+        self.refresh()
 
     def search(self):
         self.window.launch_worker_search()
-        print("searching")
 
+    def refresh(self):
+        items = self.workers.get_all_tuples()
+        self.fill_rows(items)
+
+    def fill_rows(self, items):
+        table = self.menu.table
+        table.clearContents()
+        table.setColumnCount(len(items[0]))
+        table.setRowCount(len(items))
+        r = 0
+        for item in items:
+            table.insertRow(r)  
+            fill = lambda c, text : table.setItem(r, c, QTableWidgetItem(text))
+            i = 0
+            for x in item:
+                fill(i, x)
+                i += 1
+            r += 1
 
 class WorkerEdit:
 
-    def __init__(self, window):
+    def __init__(self, window, workers):
+        self.workers = workers
         from ui.worker_edit import Ui_MainWindow
         self.menu = Ui_MainWindow()
         window.launch(self.menu)
@@ -167,9 +189,64 @@ class WorkerEdit:
 
     def setup(self):
         m = self.menu
-        m.backButton.clicked.connect(self.window.launch_main_menu())
+        m.backButton.clicked.connect(self.window.launch_workers_menu)
         m.removeButton.clicked.connect(self.remove)
+        m.searchButton.clicked.connect(self.search_btn_clicked)
+
+    def search_btn_clicked(self):
+        id = self.menu.idSearchText.text()
+        id = int(id)
+        self.search(id)
+
+    def search(self, id):
+        worker = self.get_worker(id)
+        self.display_worker(worker)
+
+    def get_worker(self, id):
+        # edit
+        worker = self.workers.search_worker(id)
+        return Worker
+
+    def display_worker(self, worker):
+        m = self.menu
+        m.nameLbl = worker.fname
+        m.lnameLbl = worker.lname
+        m.phoneLbl = worker.phone
+        m.scoreLbl = worker.score
 
     def remove(self):
         m = self.menu
         m.listbox.removeItemWidget(m.listbox.item(m.listbox.currentIndex)) 
+
+class WorkerAdd:
+
+    def __init__(self, window, workers):
+        self.workers = workers
+        from ui.worker_add import Ui_Dialog
+        self.menu = Ui_Dialog()
+        window.pop_dialog(self.menu)
+        self.setup()
+
+    def setup(self):
+        b = self.menu.buttonBox
+        b.accepted.connect(self.add)
+
+    def add(self):
+        worker = self.get_worker()
+        self.workers.add_worker(worker)
+
+    def get_worker(self):
+        m = self.menu
+        fname = m.nameText.text()
+        lname = m.lnameText.text()
+        phone = m.phoneText.text()
+        skills = self.get_skills()
+        score = 0
+        return Worker(0, fname, lname, phone, skills, score)
+
+    def get_skills(self):
+        skills = self.menu.skillsText.toPlainText()
+        skills = "".join(skills)
+        skills = skills.split("\n")
+        skills = ",".join(skills)
+        return skills
