@@ -155,9 +155,12 @@ class WorkersMenu:
         title = 'حذف خدمات دهنده'
         message = 'شماره شناسه فرد مورد نظر'
         text, ok = QInputDialog.getText(self.window.window,title ,message )
-        id = int(text)
-        if ok:
-            self.data.removeWorker(id)
+        try:
+            id = int(text)
+            if ok:
+                self.data.removeWorker(id)
+        except:
+            pass
         self.refresh()
 
     def add(self):
@@ -218,14 +221,15 @@ class WorkerEdit:
     def get_worker(self, id):
         # edit
         worker = self.workers.search_worker(id)
-        return Worker
+        return worker
 
     def display_worker(self, worker):
+        print(worker)
         m = self.menu
-        m.nameLbl = worker.fname
-        m.lnameLbl = worker.lname
-        m.phoneLbl = worker.phone
-        m.scoreLbl = worker.score
+        m.nameLbl.setText(worker.fname)
+        m.lnameLbl.setText(worker.lname)
+        m.phoneLbl.setText(worker.phone)
+        m.scoreLbl.setText(worker.score)
 
     def remove(self):
         m = self.menu
@@ -255,7 +259,7 @@ class WorkerAdd:
         phone = m.phoneText.text()
         skills = self.get_skills()
         score = 0
-        return Worker(0, fname, lname, phone, skills, score)
+        return Worker().to_worker(0, fname, lname, phone, skills, score)
 
     def get_skills(self):
         skills = self.menu.skillsText.toPlainText()
