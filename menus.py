@@ -14,15 +14,19 @@ class MainMenu:
     
     def setup(self):
         menu = self.menu
-        menu.pushButton.clicked.connect(self.quit)
-        menu.pushButton_2.clicked.connect(self.launch_log_manager)
-        menu.pushButton_3.clicked.connect(self.launch_clients_menu)
+        menu.quitButton.clicked.connect(self.quit)
+        menu.reportButton.clicked.connect(self.launch_log_manager)
+        menu.clientsButton.clicked.connect(self.launch_clients_menu)
+        menu.workersButton.clicked.connect(self.launch_workers_menu)
 
     def launch_clients_menu(self):
         self.window.launch_clients_menu()
 
     def launch_log_manager(self):
         self.window.launch_log_manager()
+
+    def laucnh_workers_menu(self):
+        self.window.laucnh_workers_menu()
 
     def quit(self):
         quit()
@@ -53,6 +57,7 @@ class ClientsMenu:
     def setup(self):
         menu = self.menu
         menu.addUserButton.clicked.connect(self.launch_add_user)
+        menu.backButton.clicked.connect(self.back)
         self.fill_rows()
 
     def fill_rows(self):
@@ -80,6 +85,9 @@ class ClientsMenu:
         self.window.launch_add_user_menu()
         print("refresh")
         self.fill_rows()
+
+    def back(self):
+        self.window.launch_main_menu()
 
 class AddUserMenu:
     def __init__(self, window, usermanager):
@@ -125,3 +133,43 @@ class AddUserMenu:
         cls(self.lname)
         cls(self.phone)
         cls(self.address)
+
+class WorkersMenu:
+    def __init__(self, window):
+        from ui.worker import Ui_MainWindow
+        self.menu = Ui_MainWindow()
+        window.launch(self.menu)
+        self.window = window
+        self.setup()
+    
+    def setup(self):
+        m = self.menu
+        m.backButton.clicked.connect(self.window.launch_main_menu)
+        m.addButton.clicked.connect(self.add)
+        m.searchButton.clicked.connect(self.search)
+
+    def add(self):
+        pass
+
+    def search(self):
+        self.window.launch_worker_search()
+        print("searching")
+
+
+class WorkerEdit:
+
+    def __init__(self, window):
+        from ui.worker_edit import Ui_MainWindow
+        self.menu = Ui_MainWindow()
+        window.launch(self.menu)
+        self.window = window
+        self.setup()
+
+    def setup(self):
+        m = self.menu
+        m.backButton.clicked.connect(self.window.launch_main_menu())
+        m.removeButton.clicked.connect(self.remove)
+
+    def remove(self):
+        m = self.menu
+        m.listbox.removeItemWidget(m.listbox.item(m.listbox.currentIndex)) 

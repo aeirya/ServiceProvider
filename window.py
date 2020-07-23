@@ -26,6 +26,12 @@ class WindowManager():
     def launch_add_user_menu(self):
         menus.AddUserMenu(self, self.modules.users)
 
+    def launch_workers_menu(self):
+        menus.WorkersMenu(self)
+
+    def launch_worker_search(self):
+        menus.WorkerEdit(self)
+
 class Window(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
