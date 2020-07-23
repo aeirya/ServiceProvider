@@ -6,6 +6,7 @@ class Request:
         self.user_id = user_id
         self.skill = skill
 
+
 class RequestManager:
 
     def __init__(self, data : Data, workers : WorkerManager):
